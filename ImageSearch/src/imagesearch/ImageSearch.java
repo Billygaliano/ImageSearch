@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package imagesearch;
+import view.JF_MainFrame;
 
 /**
  *
@@ -15,7 +16,13 @@ public class ImageSearch {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            JF_MainFrame view= new JF_MainFrame();
+                   
+            public void run() {
+                view.setVisible(true);
+            }
+        });
     }
     
 }
