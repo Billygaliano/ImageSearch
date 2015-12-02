@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.coobird.thumbnailator.Thumbnails;
+import controller.Controller;
 
 /**
  *
@@ -22,14 +23,6 @@ public class JF_MainFrame extends javax.swing.JFrame {
      */
     public JF_MainFrame() {
         initComponents();
-        try {
-            Thumbnails.of(new File("src/properties/no_image_available.png"))
-                    .size(400, 300)
-                    .toFile(new File("src/properties/no_image_available_thumbnail.png"));
-//                    jLabelImage.setIcon(null);
-        } catch (IOException ex) {
-            Logger.getLogger(JF_MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     /**
@@ -51,7 +44,7 @@ public class JF_MainFrame extends javax.swing.JFrame {
         jButtonSearch = new javax.swing.JButton();
         jPanelSearchRight = new javax.swing.JPanel();
         jScrollPaneShowSearch = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableImages = new javax.swing.JTable();
         jPanelShowResult = new javax.swing.JPanel();
         jPanelShowImage = new javax.swing.JPanel();
         jLabelImage = new javax.swing.JLabel();
@@ -84,6 +77,11 @@ public class JF_MainFrame extends javax.swing.JFrame {
 
         jButtonSearch.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jButtonSearch.setText("Buscar");
+        jButtonSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelSearchLeftLayout = new javax.swing.GroupLayout(jPanelSearchLeft);
         jPanelSearchLeft.setLayout(jPanelSearchLeftLayout);
@@ -105,8 +103,9 @@ public class JF_MainFrame extends javax.swing.JFrame {
         jPanelSearchLeftLayout.setVerticalGroup(
             jPanelSearchLeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSearchLeftLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabelSubTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(jComboBoxKindSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -119,48 +118,55 @@ public class JF_MainFrame extends javax.swing.JFrame {
 
         jScrollPaneShowSearch.setBorder(null);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableImages.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null},
-                {null},
-                {null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Imagen"
+                "id_Imagen", "Imagen"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPaneShowSearch.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
+        jTableImages.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTableImagesMousePressed(evt);
+            }
+        });
+        jScrollPaneShowSearch.setViewportView(jTableImages);
+        if (jTableImages.getColumnModel().getColumnCount() > 0) {
+            jTableImages.getColumnModel().getColumn(0).setResizable(false);
+            jTableImages.getColumnModel().getColumn(1).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanelSearchRightLayout = new javax.swing.GroupLayout(jPanelSearchRight);
         jPanelSearchRight.setLayout(jPanelSearchRightLayout);
         jPanelSearchRightLayout.setHorizontalGroup(
             jPanelSearchRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 386, Short.MAX_VALUE)
-            .addGroup(jPanelSearchRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanelSearchRightLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPaneShowSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelSearchRightLayout.createSequentialGroup()
+                .addContainerGap(28, Short.MAX_VALUE)
+                .addComponent(jScrollPaneShowSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
         jPanelSearchRightLayout.setVerticalGroup(
             jPanelSearchRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-            .addGroup(jPanelSearchRightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanelSearchRightLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPaneShowSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)))
+            .addComponent(jScrollPaneShowSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanelSearchLayout = new javax.swing.GroupLayout(jPanelSearch);
@@ -263,6 +269,51 @@ public class JF_MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
+        Controller controller = new Controller();
+        String kindSearch = jComboBoxKindSearch.getName();
+        
+        switch(kindSearch){
+            case "Nombre":{
+                controller.printImagesByName(jTableImages, jTextFieldSearch.getName());
+            }break;
+                
+            case "Extensión":{
+                controller.printImagesByExtension(jTableImages, jTextFieldSearch.getName());
+            }break;
+                
+            case "Etiqueta Marca":{
+                controller.printImagesByBrandLabel(jTableImages, jTextFieldSearch.getName());
+            }break;
+                
+            case "Etiqueta Modelo":{
+                controller.printImagesByModelLabel(jTableImages, jTextFieldSearch.getName());
+            }break;
+                
+            case "Etiqueta Latitud":{
+                controller.printImagesByLatitudeLabel(jTableImages, jTextFieldSearch.getName());
+            }break;
+                
+            case "Etiqueta Longitud":{
+                controller.printImagesByLongitudeLabel(jTableImages, jTextFieldSearch.getName());
+            }break;
+        }
+    }//GEN-LAST:event_jButtonSearchActionPerformed
+
+    private void jTableImagesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableImagesMousePressed
+        Controller controller = new Controller();
+        
+        int row = jTableImages.getSelectedRow();
+        String idString = jTableImages.getValueAt(row, 0).toString();
+        int imageId = Integer.parseInt(idString);
+        
+        try {
+            controller.printSelectedImage(jLabelImage, jTextAreaData, imageId);
+        } catch (IOException ex) {
+            Logger.getLogger(JF_MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jTableImagesMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -312,7 +363,7 @@ public class JF_MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelShowResult;
     private javax.swing.JScrollPane jScrollPaneData;
     private javax.swing.JScrollPane jScrollPaneShowSearch;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableImages;
     private javax.swing.JTextArea jTextAreaData;
     private javax.swing.JTextField jTextFieldSearch;
     // End of variables declaration//GEN-END:variables
