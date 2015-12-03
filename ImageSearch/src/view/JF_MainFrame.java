@@ -282,23 +282,23 @@ public class JF_MainFrame extends javax.swing.JFrame {
             }break;
                 
             case "Extensión":{
-                controller.printImagesByExtension(jTableImages, jTextFieldSearch.getName());
+                controller.printImagesByExtension(jTableImages, jTextFieldSearch.getText());
             }break;
                 
             case "Etiqueta Marca":{
-                controller.printImagesByBrandLabel(jTableImages, jTextFieldSearch.getName());
+                controller.printImagesByBrandLabel(jTableImages, jTextFieldSearch.getText());
             }break;
                 
             case "Etiqueta Modelo":{
-                controller.printImagesByModelLabel(jTableImages, jTextFieldSearch.getName());
+                controller.printImagesByModelLabel(jTableImages, jTextFieldSearch.getText());
             }break;
                 
             case "Etiqueta Latitud":{
-                controller.printImagesByLatitudeLabel(jTableImages, jTextFieldSearch.getName());
+                controller.printImagesByLatitudeLabel(jTableImages, jTextFieldSearch.getText());
             }break;
                 
             case "Etiqueta Longitud":{
-                controller.printImagesByLongitudeLabel(jTableImages, jTextFieldSearch.getName());
+                controller.printImagesByLongitudeLabel(jTableImages, jTextFieldSearch.getText());
             }break;
         }
     }//GEN-LAST:event_jButtonSearchActionPerformed

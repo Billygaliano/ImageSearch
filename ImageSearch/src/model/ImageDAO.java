@@ -25,34 +25,61 @@ public class ImageDAO {
         MongoDatabase db = mongoClient.getDatabase("test");
         MongoCollection<Document> collection = db.getCollection("imagenes");
         ArrayList<Imagen> images = new ArrayList();
-        Imagen image = new Imagen();
+        Imagen image;
         
         FindIterable<Document> iterable = collection.find(
         new Document("nombre_imagen", imageName));
         
-        iterable.forEach(new Block<Document>() {
-            @Override
-            public void apply(final Document document) {
-                
+        for(Document document: iterable){
+                image = new Imagen();
                 image.setId_image((Integer) document.get("id"));
                 image.setPath((String) document.get("ruta"));
                 image.setImage_name((String) document.get("nombre_imagen"));
                 image.setExtension((String) document.get("extension"));
                 images.add(image);
             }
-        });
-        
         return images;
     }
     
     public ArrayList<Imagen> getImagesByExtension(String imageExtension){
+        MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
+        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoCollection<Document> collection = db.getCollection("imagenes");
         ArrayList<Imagen> images = new ArrayList();
+        Imagen image;
         
+        FindIterable<Document> iterable = collection.find(
+        new Document("extension", imageExtension));
+        
+        for(Document document: iterable){
+                image = new Imagen();
+                image.setId_image((Integer) document.get("id"));
+                image.setPath((String) document.get("ruta"));
+                image.setImage_name((String) document.get("nombre_imagen"));
+                image.setExtension((String) document.get("extension"));
+                images.add(image);
+            }
         return images;
     }
     
     public ArrayList<Imagen> getImagesByBrandLabel(String brandLabel){
+        MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
+        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoCollection<Document> collection = db.getCollection("imagenes");
         ArrayList<Imagen> images = new ArrayList();
+        Imagen image;
+        
+        FindIterable<Document> iterable = collection.find(
+        new Document("valor", brandLabel));
+        
+        for(Document document: iterable){
+                image = new Imagen();
+                image.setId_image((Integer) document.get("id"));
+                image.setPath((String) document.get("ruta"));
+                image.setImage_name((String) document.get("nombre_imagen"));
+                image.setExtension((String) document.get("extension"));
+                images.add(image);
+            }
         
         return images;
     }
