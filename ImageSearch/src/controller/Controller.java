@@ -7,8 +7,9 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
+import javax.swing.Icon;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -17,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import model.Directory;
 import model.Image;
 import model.ImageDAO;
-import model.Label;
 import net.coobird.thumbnailator.Thumbnails;
 
 /**
@@ -35,7 +35,7 @@ public class Controller {
         
         for (Image image : images) {
             row[0] = Integer.toString(image.getId_image());
-            row[1] = image.getImage_name();
+            row[1] = image.getImage_name() + "." + image.getExtension();
             
             m.addRow(row); 
         }
@@ -134,29 +134,30 @@ public class Controller {
     }
     
     public void printSelectedImage(JLabel jLabelImage, JTextArea jTextAreaData, int imageId) throws IOException{
+        System.out.println("Hola pressed");
         ImageDAO imageDao = new ImageDAO();
         Image image = imageDao.getImageById(imageId);
         ArrayList<Directory> directories = image.getDirectories();
-        String pathFrom = image.getPath()+image.getImage_name()+"."+image.getExtension(); 
-        String pathTo = "./src/properties/thumbnail.png";
+        String pathFrom = image.getPath()+"/"+image.getImage_name()+"."+image.getExtension(); 
+        String pathTo = "src/properties/thumbnail.png";
         
         //Resizing the selected image  with the same ratio.
         Thumbnails.of(new File(pathFrom))
-        .size(400, 290)
-        .toFile("./src/properties/thumbnail.png");
+            .size(400, 290)
+            .toFile(pathTo);
         
         //Setting the resized image as icon of jLabelImage
-        URL url = this.getClass().getResource(pathTo);  
-        ImageIcon icon = new ImageIcon(url); 
-        jLabelImage.setIcon(null);
+        ImageIcon icon = new ImageIcon(pathFrom);
+        ImageIcon icon2 = new ImageIcon(icon.getImage().getScaledInstance(jLabelImage.getWidth(), jLabelImage.getHeight(), Image.SCALE_DEFAULT));
+        jLabelImage.setIcon(icon2);
         
         //Adding the text with de image's info in the jTextAreaData
-        jTextAreaData.setText("Información de " + image.getImage_name());
-        for (Directory directory : directories) {
-            ArrayList<Label> labels = directory.getLabels();
-            for (Label label : labels) {
-                jTextAreaData.setText(directory.getDirectory_name() + " - " + label.getName_label() + " - " + label.getValue());
-            }
-        }
+//        jTextAreaData.setText("Información de " + image.getImage_name());
+//        for (Directory directory : directories) {
+//            ArrayList<Label> labels = directory.getLabels();
+//            for (Label label : labels) {
+//                jTextAreaData.setText(directory.getDirectory_name() + " - " + label.getName_label() + " - " + label.getValue());
+//            }
+//        }
     }
 }

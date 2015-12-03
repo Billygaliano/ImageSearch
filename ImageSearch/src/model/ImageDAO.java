@@ -5,7 +5,9 @@
  */
 package model;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
+import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -19,7 +21,26 @@ import org.bson.Document;
  */
 public class ImageDAO {
     public ArrayList<Image> getImagesByName(String imageName){
+        MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
+        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoCollection<Document> collection = db.getCollection("imagenes");
         ArrayList<Image> images = new ArrayList();
+        Image image = new Image();
+        
+        FindIterable<Document> iterable = collection.find(
+        new Document("nombre_imagen", imageName));
+        
+        iterable.forEach(new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                
+                image.setId_image((Integer) document.get("id"));
+                image.setPath((String) document.get("ruta"));
+                image.setImage_name((String) document.get("nombre_imagen"));
+                image.setExtension((String) document.get("extension"));
+                images.add(image);
+            }
+        });
         
         return images;
     }
@@ -66,10 +87,12 @@ public class ImageDAO {
         iterable.forEach(new Block<Document>() {
             @Override
             public void apply(final Document document) {
-                System.out.println(document);
+                image.setPath((String) document.get("ruta"));
+                image.setImage_name((String) document.get("nombre_imagen"));
+                image.setExtension((String) document.get("extension"));
             }
         });
-        
+       
         return image;
     }
 }

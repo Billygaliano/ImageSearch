@@ -187,19 +187,24 @@ public class JF_MainFrame extends javax.swing.JFrame {
         jPanelShowResult.setBackground(new java.awt.Color(153, 153, 153));
 
         jPanelShowImage.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelShowImage.setMaximumSize(new java.awt.Dimension(400, 201));
+        jPanelShowImage.setPreferredSize(new java.awt.Dimension(400, 201));
 
         jLabelImage.setBackground(new java.awt.Color(255, 255, 255));
         jLabelImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/properties/no_image_available.png"))); // NOI18N
+        jLabelImage.setMaximumSize(new java.awt.Dimension(400, 201));
+        jLabelImage.setMinimumSize(new java.awt.Dimension(400, 201));
+        jLabelImage.setPreferredSize(new java.awt.Dimension(400, 201));
 
         javax.swing.GroupLayout jPanelShowImageLayout = new javax.swing.GroupLayout(jPanelShowImage);
         jPanelShowImage.setLayout(jPanelShowImageLayout);
         jPanelShowImageLayout.setHorizontalGroup(
             jPanelShowImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabelImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabelImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanelShowImageLayout.setVerticalGroup(
             jPanelShowImageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jLabelImage, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         jTextAreaData.setColumns(20);
@@ -212,19 +217,19 @@ public class JF_MainFrame extends javax.swing.JFrame {
             jPanelShowResultLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelShowResultLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanelShowImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanelShowImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPaneData, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanelShowResultLayout.setVerticalGroup(
             jPanelShowResultLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelShowResultLayout.createSequentialGroup()
+            .addGroup(jPanelShowResultLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelShowResultLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPaneData, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-                    .addComponent(jPanelShowImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(jPanelShowResultLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanelShowImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPaneData))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanelMainLayout = new javax.swing.GroupLayout(jPanelMain);
@@ -269,11 +274,11 @@ public class JF_MainFrame extends javax.swing.JFrame {
 
     private void jButtonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchActionPerformed
         Controller controller = new Controller();
-        String kindSearch = jComboBoxKindSearch.getName();
+        String kindSearch = (String) jComboBoxKindSearch.getSelectedItem();
         
         switch(kindSearch){
             case "Nombre":{
-                controller.printImagesByName(jTableImages, jTextFieldSearch.getName());
+                controller.printImagesByName(jTableImages, jTextFieldSearch.getText());
             }break;
                 
             case "Extensión":{
@@ -299,13 +304,12 @@ public class JF_MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSearchActionPerformed
 
     private void jTableImagesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableImagesMousePressed
-        Controller controller = new Controller();
-        
-        int row = jTableImages.getSelectedRow();
-        String idString = jTableImages.getValueAt(row, 0).toString();
-        int imageId = Integer.parseInt(idString);
-        
         try {
+            Controller controller = new Controller();
+            
+            int row = jTableImages.getSelectedRow();
+            String idString = jTableImages.getValueAt(row, 0).toString();
+            int imageId = Integer.parseInt(idString);
             controller.printSelectedImage(jLabelImage, jTextAreaData, imageId);
         } catch (IOException ex) {
             Logger.getLogger(JF_MainFrame.class.getName()).log(Level.SEVERE, null, ex);
