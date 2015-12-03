@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * @author inftel12
  */
-public class Image {
+public class Imagen {
     private int id_image;
     private String path;
     private String image_name;
@@ -15,7 +15,7 @@ public class Image {
     private int size;
     private ArrayList<Directory> directories;
 
-    public Image(int id_image, String path, String image_name, String extension, int size, ArrayList<Directory> directories) {
+    public Imagen(int id_image, String path, String image_name, String extension, int size, ArrayList<Directory> directories) {
         this.id_image = id_image;
         this.path = path;
         this.image_name = image_name;
@@ -24,7 +24,7 @@ public class Image {
         this.directories = directories;
     }
 
-    public Image() {}
+    public Imagen() {}
 
     @Override
     public String toString() {
@@ -51,7 +51,7 @@ public class Image {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Image other = (Image) obj;
+        final Imagen other = (Imagen) obj;
         if (this.id_image != other.id_image) {
             return false;
         }

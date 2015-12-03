@@ -20,12 +20,12 @@ import org.bson.Document;
  * @author inftel12
  */
 public class ImageDAO {
-    public ArrayList<Image> getImagesByName(String imageName){
+    public ArrayList<Imagen> getImagesByName(String imageName){
         MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
         MongoDatabase db = mongoClient.getDatabase("test");
         MongoCollection<Document> collection = db.getCollection("imagenes");
-        ArrayList<Image> images = new ArrayList();
-        Image image = new Image();
+        ArrayList<Imagen> images = new ArrayList();
+        Imagen image = new Imagen();
         
         FindIterable<Document> iterable = collection.find(
         new Document("nombre_imagen", imageName));
@@ -45,41 +45,41 @@ public class ImageDAO {
         return images;
     }
     
-    public ArrayList<Image> getImagesByExtension(String imageExtension){
-        ArrayList<Image> images = new ArrayList();
+    public ArrayList<Imagen> getImagesByExtension(String imageExtension){
+        ArrayList<Imagen> images = new ArrayList();
         
         return images;
     }
     
-    public ArrayList<Image> getImagesByBrandLabel(String brandLabel){
-        ArrayList<Image> images = new ArrayList();
+    public ArrayList<Imagen> getImagesByBrandLabel(String brandLabel){
+        ArrayList<Imagen> images = new ArrayList();
         
         return images;
     }
     
-    public ArrayList<Image> getImagesByModelLabel(String modelLabel){
-        ArrayList<Image> images = new ArrayList();
+    public ArrayList<Imagen> getImagesByModelLabel(String modelLabel){
+        ArrayList<Imagen> images = new ArrayList();
         
         return images;
     }
     
-    public ArrayList<Image> getImagesByLatitudeLabel(String latitudeLabel){
-        ArrayList<Image> images = new ArrayList();
+    public ArrayList<Imagen> getImagesByLatitudeLabel(String latitudeLabel){
+        ArrayList<Imagen> images = new ArrayList();
         
         return images;
     }
     
-    public ArrayList<Image> getImagesByLongitudeLabel(String longitudeLabel){
-        ArrayList<Image> images = new ArrayList();
+    public ArrayList<Imagen> getImagesByLongitudeLabel(String longitudeLabel){
+        ArrayList<Imagen> images = new ArrayList();
         
         return images;
     }
     
-    public Image getImageById(int imageId){
+    public Imagen getImageById(int imageId){
         MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
         MongoDatabase db = mongoClient.getDatabase("test");
         MongoCollection<Document> collection = db.getCollection("imagenes");
-        Image image = new Image();
+        Imagen image = new Imagen();
         
         FindIterable<Document> iterable = collection.find(
         new Document("id", imageId));
