@@ -136,27 +136,27 @@ public class Controller {
     public void printSelectedImage(JLabel jLabelImage, JTextArea jTextAreaData, int imageId) throws IOException{
         ImageDAO imageDao = new ImageDAO();
         Image image = imageDao.getImageById(imageId);
-//        ArrayList<Directory> directories = image.getDirectories();
-//        String pathFrom = image.getPath()+image.getImage_name()+"."+image.getExtension(); 
-//        String pathTo = "./src/properties/thumbnail.png";
-//        
-//        //Resizing the selected image  with the same ratio.
-//        Thumbnails.of(new File(pathFrom))
-//        .size(400, 290)
-//        .toFile("./src/properties/thumbnail.png");
-//        
-//        //Setting the resized image as icon of jLabelImage
-//        URL url = this.getClass().getResource(pathTo);  
-//        ImageIcon icon = new ImageIcon(url); 
-//        jLabelImage.setIcon(null);
-//        
-//        //Adding the text with de image's info in the jTextAreaData
-//        jTextAreaData.setText("Información de " + image.getImage_name());
-//        for (Directory directory : directories) {
-//            ArrayList<Label> labels = directory.getLabels();
-//            for (Label label : labels) {
-//                jTextAreaData.setText(directory.getDirectory_name() + " - " + label.getName_label() + " - " + label.getValue());
-//            }
-//        }
+        ArrayList<Directory> directories = image.getDirectories();
+        String pathFrom = image.getPath()+image.getImage_name()+"."+image.getExtension(); 
+        String pathTo = "./src/properties/thumbnail.png";
+        
+        //Resizing the selected image  with the same ratio.
+        Thumbnails.of(new File(pathFrom))
+        .size(400, 290)
+        .toFile("./src/properties/thumbnail.png");
+        
+        //Setting the resized image as icon of jLabelImage
+        URL url = this.getClass().getResource(pathTo);  
+        ImageIcon icon = new ImageIcon(url); 
+        jLabelImage.setIcon(null);
+        
+        //Adding the text with de image's info in the jTextAreaData
+        jTextAreaData.setText("Información de " + image.getImage_name());
+        for (Directory directory : directories) {
+            ArrayList<Label> labels = directory.getLabels();
+            for (Label label : labels) {
+                jTextAreaData.setText(directory.getDirectory_name() + " - " + label.getName_label() + " - " + label.getValue());
+            }
+        }
     }
 }
