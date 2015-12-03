@@ -6,6 +6,10 @@
 package etl;
 
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.BasicDBObjectBuilder;
+import com.mongodb.DB;
+import com.mongodb.DBObject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,6 +21,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import static java.util.Arrays.asList;
 import org.bson.Document;
+import com.mongodb.util.JSON;
+
 
 /**
  *
@@ -27,17 +33,10 @@ public class Etl {
     public static void main(String args[]){
         MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
         MongoDatabase db = mongoClient.getDatabase("test");
-        MongoCollection<Document> collection = db.getCollection("imagenes");
-        ArrayList<Imagen> imagenes=new ArrayList<>();
-        Imagen imagen= new Imagen();
-        Directorio directorio =new Directorio();
-        ArrayList<Directorio> directorios=new ArrayList<>();
-        Etiqueta etiqueta=new Etiqueta();
-        Ruta ruta = new Ruta();
-//        ArrayList<Etiqueta> etiquetas=new ArrayList<>();
-        
-        
+        MongoCollection<Document> collection = db.getCollection("imagenes");   
         Connection connection=null;
+        
+        String directorio_antiguo=null;
        
         Statement stmt;
         String url="jdbc:oracle:thin:INFTEL15_11/INFTEL@olimpia.lcc.uma.es:1521:edgar";
@@ -50,122 +49,83 @@ public class Etl {
         }
         
         try{
-            ResultSet rs=connection.createStatement().executeQuery("Select * from imagen");
-                rs.next();
-                imagen.setId(rs.getInt("id_imagen"));
-                int id_imagen=rs.getInt("id_imagen");
-                imagen.setRuta(rs.getInt("id_ruta"));
-                int id_ruta = rs.getInt("id_ruta");
-                imagen.setNombre_imagen(rs.getString("nombre_imagen"));
-                imagen.setExtension(rs.getString("extension"));
-                imagen.setTamanio(rs.getInt("tamanio_imagen"));
-                System.out.println(imagen);
-            
-            rs=connection.createStatement().executeQuery("Select * from ruta where id_ruta="+id_ruta);
-            rs.next();
-            ruta.setNombre_ruta(rs.getString("nombre_ruta"));
-            System.out.println(ruta);
-            
-            rs=connection.createStatement().executeQuery("Select * from valor where id_ruta="+id_ruta+" and id_imagen="+id_imagen);
-            rs.next();
-            ruta.setNombre_ruta(rs.getString("nombre_ruta"));
-            
-            
-            
-        }catch(SQLException ex){
-            System.out.println("Error en sql");
-        }
-            
-        
-        
-//        try{
-//            ResultSet rs=connection.createStatement().executeQuery("Select * from imagen");
-//            while(rs.next()){
-//                imagen.setId(rs.getInt("id_imagen"));
-//                imagen.setRuta(rs.getInt("id_ruta"));
-//                imagen.setNombre_imagen(rs.getString("nombre_imagen"));
-//                imagen.setExtension(rs.getString("extension"));
-//                imagen.setTamanio(rs.getInt("tamanio_imagen"));
-//                imagenes.add(imagen);
-//                System.out.println(imagen);
-//            }
-//        
-//        }catch(SQLException ex){
-//            System.out.println("Error en sql");
-//        }
-//        
-//        try{
-//            ResultSet rs=connection.createStatement().executeQuery("Select * from directorio");
-//            while(rs.next()){
-//                directorio.setId_directorio(rs.getInt("id_directorio"));
-//                directorio.setNombre_directorio(rs.getString("nombre_directorio"));
-//                directorios.add(directorio);
-//                System.out.println(directorio);
-//            }
-//        
-//        }catch(SQLException ex){
-//            System.out.println("Error en sql");
-//        }
-//        
-//        try{
-//            ResultSet rs=connection.createStatement().executeQuery("Select * from etiqueta");
-//            while(rs.next()){
-//                etiqueta.setId_etiqueta(rs.getInt("id_etiqueta"));
-//                etiqueta.setNombre_etiqueta(rs.getString("nombre_etiqueta"));
-//                etiqueta.setValor(rs.getString("valor"));
-//                System.out.println(directorio);
-//            }
-//        
-//        }catch(SQLException ex){
-//            System.out.println("Error en sql");
-//        }
-//        
-//        
-        
-        
-        
-//        collection.insertOne(
-//                new Document("id",8)
-//                    .append("nombre_imagen","prueba2")
-//                    .append("extension","jpg")
-//                    .append("ruta","/imagen")
-//                    .append("tamaño",23)
-//                    .append("directorio",asList(
-//                            new Document()
-//                            .append("nombre_directorio","gps")
-//                            .append("etiqueta",asList(
-//                                new Document()
-//                                .append("nombre_etiqueta","model")
-//                                .append("valor","bq")))))
-//        );
-//        
-        
-        
-        
-        
-        
-               
-//{
-//	"_id" : ObjectId("565f0d7993a38bf39c9729fc"),
-//	"id" : 1,
-//	"nombre_imagen" : "prueba",
-//	"extension" : "jpg",
-//	"ruta" : "imagen/",
-//	"tamaño" : "23",
-//	"directorio" : [
-//		{
-//			"nombre_directorio" : "exif",
-//			"etiqueta" : [
-//				{
-//					"nombre_etiqueta" : "marca",
-//					"valor" : "bq"
-//				}
-//			]
-//		}
-//	]
-//}
+            ResultSet rs_imagen=connection.createStatement().executeQuery("Select * from imagen");
+               while (rs_imagen.next()) {
+                    int id_imagen = rs_imagen.getInt("id_imagen");
+                    int id_ruta = rs_imagen.getInt("id_ruta");
+                    String nombre_imagen = rs_imagen.getString("nombre_imagen");
+                    String extension = rs_imagen.getString("extension");
+                    int tamanio = rs_imagen.getInt("tamanio_imagen");
 
-//        );
-    
+                    ResultSet rs_ruta = connection.createStatement().executeQuery("Select * from ruta where id_ruta=" + id_ruta);
+                    rs_ruta.next();
+                    String nombre_ruta = rs_ruta.getString("nombre_ruta");
+
+                    
+                    collection.insertOne(
+                            new Document("id", id_imagen)
+                            .append("nombre_imagen", nombre_imagen)
+                            .append("extension", extension)
+                            .append("ruta", nombre_ruta)
+                            .append("tamaño", tamanio));
+
+                    ResultSet rs_valor = connection.createStatement().executeQuery("Select * from valor where id_ruta=" + id_ruta + " and id_imagen=" + id_imagen +"order by id_directorio");
+                    int i = 0;
+                    while (rs_valor.next()) {
+
+                        String valor = rs_valor.getString("valor");
+                        int id_etiqueta = rs_valor.getInt("id_etiqueta");
+                        int id_directorio = rs_valor.getInt("id_directorio");
+
+                        ResultSet rs_etiqueta = connection.createStatement().executeQuery("Select * from etiqueta where id_etiqueta=" + id_etiqueta);
+                        rs_etiqueta.next();
+                        String nombre_etiqueta = rs_etiqueta.getString("nombre_etiqueta");
+
+                        ResultSet rs_directorio = connection.createStatement().executeQuery("Select * from directorio where id_directorio=" + id_directorio);
+                        rs_directorio.next();
+                        String nombre_directorio = rs_directorio.getString("nombre_directorio");
+                        System.out.println(nombre_directorio);
+                        
+                        String nombre_etiqueta2 = "etiqueta" + i;
+                        String nombre_directorio2 = "directorio" + i;
+//                        if(!(nombre_directorio.equals(directorio_antiguo))){
+                            directorio_antiguo=nombre_directorio;
+                            i++;
+
+                            collection.updateMany(new Document("id", id_imagen),
+                                    new Document("$set", new Document(nombre_directorio2, asList(
+                                                            new Document()
+                                                            .append("nombre directorio", nombre_directorio)
+                                                            .append("nombre etiqueta", asList(
+                                                                            new Document()
+                                                                            .append("nombre_etiqueta", nombre_etiqueta)
+                                                                            .append("valor", valor)
+                                                                    )
+                                                            ))
+                                            )));
+//                        }
+//                        else{
+//                           i++;
+//                           System.out.println("entraaa");
+//                           collection.updateMany(new Document(nombre_directorio2,nombre_directorio),
+//                                                            new Document("$set",new Document(nombre_etiqueta2, asList(
+//                                                                    new Document()
+//                                                                        .append("nombre_etiqueta2", asList(
+//                                                                            new Document()
+//                                                                            .append("nombre_etiqueta", nombre_etiqueta2)
+//                                                                            .append("valor", valor)
+//                                                                    )
+//                                                            ))
+//                                            )));
+                           
+//                        }
+                        
+                        rs_etiqueta.close();
+                        rs_directorio.close();
+                    }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error en sql"+ex);
+        } 
     }
 }

@@ -113,11 +113,11 @@ public class Image {
         this.size = size;
     }
 
-    public ArrayList<Directory> getDirectory() {
+    public ArrayList<Directory> getDirectories() {
         return directories;
     }
 
-    public void setDirectory(ArrayList<Directory> directories) {
+    public void setDirectories(ArrayList<Directory> directories) {
         this.directories = directories;
     }
     

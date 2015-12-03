@@ -14,9 +14,9 @@ import java.util.Objects;
  */
 public class Directory {
     private String directory_name;
-    private ArrayList<String> labels;
+    private ArrayList<Label> labels;
 
-    public Directory(String directory_name, ArrayList<String> labels) {
+    public Directory(String directory_name, ArrayList<Label> labels) {
         this.directory_name = directory_name;
         this.labels = labels;
     }
@@ -60,11 +60,11 @@ public class Directory {
         this.directory_name = directory_name;
     }
 
-    public ArrayList<String> getLabels() {
+    public ArrayList<Label> getLabels() {
         return labels;
     }
 
-    public void setLabels(ArrayList<String> labels) {
+    public void setLabels(ArrayList<Label> labels) {
         this.labels = labels;
     }
     

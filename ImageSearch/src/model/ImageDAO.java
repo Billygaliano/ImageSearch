@@ -5,7 +5,13 @@
  */
 package model;
 
+import com.mongodb.Block;
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
+import org.bson.Document;
 
 /**
  *
@@ -49,7 +55,20 @@ public class ImageDAO {
     }
     
     public Image getImageById(int imageId){
+        MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
+        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoCollection<Document> collection = db.getCollection("imagenes");
         Image image = new Image();
+        
+        FindIterable<Document> iterable = collection.find(
+        new Document("id", imageId));
+        
+        iterable.forEach(new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                System.out.println(document);
+            }
+        });
         
         return image;
     }

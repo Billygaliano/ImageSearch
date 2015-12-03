@@ -5,7 +5,7 @@
  */
 package imagesearch;
 import view.JF_MainFrame;
-
+import model.ImageDAO;
 /**
  *
  * @author inftel12
@@ -20,6 +20,8 @@ public class ImageSearch {
             JF_MainFrame view= new JF_MainFrame();
                    
             public void run() {
+                ImageDAO imagenDao = new ImageDAO();
+                imagenDao.getImageById(1);
                 view.setVisible(true);
             }
         });
