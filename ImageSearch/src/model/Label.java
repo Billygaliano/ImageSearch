@@ -20,6 +20,8 @@ public class Label {
         this.value = value;
     }
 
+    Label() {}
+
     @Override
     public int hashCode() {
         int hash = 7;

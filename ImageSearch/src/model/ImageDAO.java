@@ -5,9 +5,6 @@
  */
 package model;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.Block;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -32,7 +29,7 @@ public class ImageDAO {
         
         for(Document document: iterable){
                 image = new Imagen();
-                image.setId_image((Integer) document.get("id"));
+                image.setId_image((Integer) document.get("_id"));
                 image.setPath((String) document.get("ruta"));
                 image.setImage_name((String) document.get("nombre_imagen"));
                 image.setExtension((String) document.get("extension"));
@@ -53,7 +50,7 @@ public class ImageDAO {
         
         for(Document document: iterable){
                 image = new Imagen();
-                image.setId_image((Integer) document.get("id"));
+                image.setId_image((Integer) document.get("_id"));
                 image.setPath((String) document.get("ruta"));
                 image.setImage_name((String) document.get("nombre_imagen"));
                 image.setExtension((String) document.get("extension"));
@@ -70,11 +67,11 @@ public class ImageDAO {
         Imagen image;
         
         FindIterable<Document> iterable = collection.find(
-        new Document("valor", brandLabel));
+        new Document("directorio.etiquetas.valor", brandLabel));
         
         for(Document document: iterable){
                 image = new Imagen();
-                image.setId_image((Integer) document.get("id"));
+                image.setId_image((Integer) document.get("_id"));
                 image.setPath((String) document.get("ruta"));
                 image.setImage_name((String) document.get("nombre_imagen"));
                 image.setExtension((String) document.get("extension"));
@@ -85,19 +82,67 @@ public class ImageDAO {
     }
     
     public ArrayList<Imagen> getImagesByModelLabel(String modelLabel){
+        MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
+        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoCollection<Document> collection = db.getCollection("imagenes");
         ArrayList<Imagen> images = new ArrayList();
+        Imagen image;
+        
+        FindIterable<Document> iterable = collection.find(
+        new Document("directorio.etiquetas.valor", modelLabel));
+        
+        for(Document document: iterable){
+                image = new Imagen();
+                image.setId_image((Integer) document.get("_id"));
+                image.setPath((String) document.get("ruta"));
+                image.setImage_name((String) document.get("nombre_imagen"));
+                image.setExtension((String) document.get("extension"));
+                images.add(image);
+            }
         
         return images;
     }
     
-    public ArrayList<Imagen> getImagesByLatitudeLabel(String latitudeLabel){
+    public ArrayList<Imagen> getImagesByDateLabel(String dateLabel){
+        MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
+        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoCollection<Document> collection = db.getCollection("imagenes");
         ArrayList<Imagen> images = new ArrayList();
+        Imagen image;
+        
+        FindIterable<Document> iterable = collection.find(
+        new Document("directorio.etiquetas.valor", dateLabel));
+        
+        for(Document document: iterable){
+                image = new Imagen();
+                image.setId_image((Integer) document.get("_id"));
+                image.setPath((String) document.get("ruta"));
+                image.setImage_name((String) document.get("nombre_imagen"));
+                image.setExtension((String) document.get("extension"));
+                images.add(image);
+            }
         
         return images;
     }
     
-    public ArrayList<Imagen> getImagesByLongitudeLabel(String longitudeLabel){
+    public ArrayList<Imagen> getImagesByDirectoryLabel(String directoryLabel){
+        MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
+        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoCollection<Document> collection = db.getCollection("imagenes");
         ArrayList<Imagen> images = new ArrayList();
+        Imagen image;
+        
+        FindIterable<Document> iterable = collection.find(
+        new Document("directorio.nombre_directorio", directoryLabel));
+        
+        for(Document document: iterable){
+                image = new Imagen();
+                image.setId_image((Integer) document.get("_id"));
+                image.setPath((String) document.get("ruta"));
+                image.setImage_name((String) document.get("nombre_imagen"));
+                image.setExtension((String) document.get("extension"));
+                images.add(image);
+            }
         
         return images;
     }
@@ -105,21 +150,28 @@ public class ImageDAO {
     public Imagen getImageById(int imageId){
         MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
         MongoDatabase db = mongoClient.getDatabase("test");
-        MongoCollection<Document> collection = db.getCollection("imagenes");
+        MongoCollection<Document> collection = db.getCollection("imagen");
         Imagen image = new Imagen();
+        ArrayList<Directory> directories = new ArrayList();
         
         FindIterable<Document> iterable = collection.find(
-        new Document("id", imageId));
+        new Document("id", imageId));        
         
-        iterable.forEach(new Block<Document>() {
-            @Override
-            public void apply(final Document document) {
-                image.setPath((String) document.get("ruta"));
-                image.setImage_name((String) document.get("nombre_imagen"));
-                image.setExtension((String) document.get("extension"));
-            }
-        });
-       
+        for(Document document: iterable){
+            Directory directory = new Directory();
+            Label label = new Label();
+            image.setPath((String) document.get("ruta"));
+            image.setImage_name((String) document.get("nombre_imagen"));
+            image.setExtension((String) document.get("extension"));
+            directory.setDirectory_name((String) document.get("directorio"));
+            label.setName_label((String) document.get("etiqueta"));
+            label.setValue((String) document.get("valor"));
+            directory.setLabel(label);
+            directories.add(directory);
+            
+            image.setDirectories(directories);
+        }
+        
         return image;
     }
 }

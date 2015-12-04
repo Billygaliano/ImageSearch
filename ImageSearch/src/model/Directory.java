@@ -5,7 +5,6 @@
  */
 package model;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -14,18 +13,20 @@ import java.util.Objects;
  */
 public class Directory {
     private String directory_name;
-    private ArrayList<Label> labels;
+    private Label label;
 
-    public Directory(String directory_name, ArrayList<Label> labels) {
+    public Directory(String directory_name, Label label) {
         this.directory_name = directory_name;
-        this.labels = labels;
+        this.label = label;
     }
+
+    Directory() {}
 
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 23 * hash + Objects.hashCode(this.directory_name);
-        hash = 23 * hash + Objects.hashCode(this.labels);
+        hash = 23 * hash + Objects.hashCode(this.label);
         return hash;
     }
 
@@ -41,7 +42,7 @@ public class Directory {
         if (!Objects.equals(this.directory_name, other.directory_name)) {
             return false;
         }
-        if (!Objects.equals(this.labels, other.labels)) {
+        if (!Objects.equals(this.label, other.label)) {
             return false;
         }
         return true;
@@ -49,7 +50,7 @@ public class Directory {
 
     @Override
     public String toString() {
-        return "Directory{" + "directory_name=" + directory_name + ", labels=" + labels + '}';
+        return "Directory{" + "directory_name=" + directory_name + ", label=" + label + '}';
     }
 
     public String getDirectory_name() {
@@ -60,12 +61,12 @@ public class Directory {
         this.directory_name = directory_name;
     }
 
-    public ArrayList<Label> getLabels() {
-        return labels;
+    public Label getLabel() {
+        return label;
     }
 
-    public void setLabels(ArrayList<Label> labels) {
-        this.labels = labels;
+    public void setLabel(Label label) {
+        this.label = label;
     }
     
     

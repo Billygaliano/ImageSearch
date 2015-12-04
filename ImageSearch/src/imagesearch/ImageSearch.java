@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package imagesearch;
-import view.JF_MainFrame;
+import view.JF_Principal;
 /**
  *
  * @author inftel12
@@ -16,7 +16,7 @@ public class ImageSearch {
      */
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
-            JF_MainFrame view= new JF_MainFrame();
+            JF_Principal view= new JF_Principal();
                    
             public void run() {
                 view.setVisible(true);

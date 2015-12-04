@@ -5,20 +5,16 @@
  */
 package controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.swing.Icon;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import model.Directory;
 import model.Imagen;
 import model.ImageDAO;
-import net.coobird.thumbnailator.Thumbnails;
 
 /**
  *
@@ -29,13 +25,14 @@ public class Controller {
         ImageDAO imageDao = new ImageDAO();
         ArrayList<Imagen> images = imageDao.getImagesByName(imageName);
         
-        String title[] = {"Id", "Imagen"};
+        String title[] = {"Id", "Ruta", "Imagen"};
         DefaultTableModel m = new DefaultTableModel(null,title);
-        String row[] = new String[2];
+        String row[] = new String[3];
         
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
-            row[1] = image.getImage_name() + "." + image.getExtension();
+            row[1] = image.getPath();
+            row[2] = image.getImage_name();
             
             m.addRow(row); 
         }
@@ -47,13 +44,14 @@ public class Controller {
         ImageDAO imageDao = new ImageDAO();
         ArrayList<Imagen> images = imageDao.getImagesByExtension(imageExtension);
         
-        String title[] = {"Id", "Imagen"};
+        String title[] = {"Id", "Ruta", "Imagen"};
         DefaultTableModel m = new DefaultTableModel(null,title);
-        String row[] = new String[2];
+        String row[] = new String[3];
         
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
-            row[1] = image.getImage_name();
+            row[1] = image.getPath();
+            row[2] = image.getImage_name();
             
             m.addRow(row); 
         }
@@ -65,13 +63,14 @@ public class Controller {
         ImageDAO imageDao = new ImageDAO();
         ArrayList<Imagen> images = imageDao.getImagesByBrandLabel(brandLabel);
         
-        String title[] = {"Id", "Imagen"};
+        String title[] = {"Id", "Ruta", "Imagen"};
         DefaultTableModel m = new DefaultTableModel(null,title);
-        String row[] = new String[2];
+        String row[] = new String[3];
         
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
-            row[1] = image.getImage_name();
+            row[1] = image.getPath();
+            row[2] = image.getImage_name();
             
             m.addRow(row); 
         }
@@ -83,13 +82,14 @@ public class Controller {
         ImageDAO imageDao = new ImageDAO();
         ArrayList<Imagen> images = imageDao.getImagesByModelLabel(modelLabel);
         
-        String title[] = {"Id", "Imagen"};
+        String title[] = {"Id", "Ruta", "Imagen"};
         DefaultTableModel m = new DefaultTableModel(null,title);
-        String row[] = new String[2];
+        String row[] = new String[3];
         
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
-            row[1] = image.getImage_name();
+            row[1] = image.getPath();
+            row[2] = image.getImage_name();
             
             m.addRow(row); 
         }
@@ -97,17 +97,18 @@ public class Controller {
         jTableImages.setModel(m);
     }
     
-    public void printImagesByLatitudeLabel(JTable jTableImages, String latitudeLabel){
+    public void printImagesByDateLabel(JTable jTableImages, String dateLabel){
         ImageDAO imageDao = new ImageDAO();
-        ArrayList<Imagen> images = imageDao.getImagesByLatitudeLabel(latitudeLabel);
+        ArrayList<Imagen> images = imageDao.getImagesByDateLabel(dateLabel);
         
-        String title[] = {"Id", "Imagen"};
+        String title[] = {"Id", "Ruta", "Imagen"};
         DefaultTableModel m = new DefaultTableModel(null,title);
-        String row[] = new String[2];
+        String row[] = new String[3];
         
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
-            row[1] = image.getImage_name();
+            row[1] = image.getPath();
+            row[2] = image.getImage_name();
             
             m.addRow(row); 
         }
@@ -115,17 +116,18 @@ public class Controller {
         jTableImages.setModel(m);
     }
     
-    public void printImagesByLongitudeLabel(JTable jTableImages, String longitudeLabel){
+    public void printImagesByDirectoryLabel(JTable jTableImages, String directoryLabel){
         ImageDAO imageDao = new ImageDAO();
-        ArrayList<Imagen> images = imageDao.getImagesByLongitudeLabel(longitudeLabel);
+        ArrayList<Imagen> images = imageDao.getImagesByDirectoryLabel(directoryLabel);
         
-        String title[] = {"Id", "Imagen"};
+        String title[] = {"Id", "Ruta", "Imagen"};
         DefaultTableModel m = new DefaultTableModel(null,title);
-        String row[] = new String[2];
+        String row[] = new String[3];
         
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
-            row[1] = image.getImage_name();
+            row[1] = image.getPath();
+            row[2] = image.getImage_name();
             
             m.addRow(row); 
         }
@@ -133,31 +135,30 @@ public class Controller {
         jTableImages.setModel(m);
     }
     
-    public void printSelectedImage(JLabel jLabelImage, JTextArea jTextAreaData, int imageId) throws IOException{
-        System.out.println("Hola pressed");
+    public void printSelectedImage(JLabel jLabelImage, JTable jTableImagesData, int imageId) throws IOException{
         ImageDAO imageDao = new ImageDAO();
         Imagen image = imageDao.getImageById(imageId);
+        System.out.println(image);
         ArrayList<Directory> directories = image.getDirectories();
         String pathFrom = image.getPath()+"/"+image.getImage_name()+"."+image.getExtension(); 
         String pathTo = "src/properties/thumbnail.png";
-        
-        //Resizing the selected image  with the same ratio.
-        Thumbnails.of(new File(pathFrom))
-            .size(400, 290)
-            .toFile(pathTo);
         
         //Setting the resized image as icon of jLabelImage
         ImageIcon icon = new ImageIcon(pathFrom);
         ImageIcon icon2 = new ImageIcon(icon.getImage().getScaledInstance(jLabelImage.getWidth(), jLabelImage.getHeight(), Image.SCALE_DEFAULT));
         jLabelImage.setIcon(icon2);
         
-        //Adding the text with de image's info in the jTextAreaData
-//        jTextAreaData.setText("Información de " + image.getImage_name());
-//        for (Directory directory : directories) {
-//            ArrayList<Label> labels = directory.getLabels();
-//            for (Label label : labels) {
-//                jTextAreaData.setText(directory.getDirectory_name() + " - " + label.getName_label() + " - " + label.getValue());
-//            }
-//        }
+        //Adding the text with de image's info in the jTableImagesData
+        String title[] = {"Directorio", "Etiqueta", "Valor"};
+        DefaultTableModel m = new DefaultTableModel(null,title);
+        String row[] = new String[3];  
+        for (Directory directory : directories) {
+            row[0] = directory.getDirectory_name();
+            row[1] = directory.getLabel().getName_label();
+            row[2] = directory.getLabel().getValue();
+            
+            m.addRow(row); 
+        }        
+        jTableImagesData.setModel(m);
     }
 }
