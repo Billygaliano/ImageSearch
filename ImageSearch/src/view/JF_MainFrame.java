@@ -78,7 +78,7 @@ public class JF_MainFrame extends javax.swing.JFrame {
         jTextFieldSearch.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         jComboBoxKindSearch.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jComboBoxKindSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nombre", "Extensión", "Directorio", "Etiqueta Marca", "Etiqueta Modelo", "Etiqueta Fecha" }));
+        jComboBoxKindSearch.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Nombre", "Extensión", "Nombre y extensión", "Directorio", "Etiqueta Marca", "Etiqueta Modelo", "Etiqueta Fecha" }));
 
         jButtonSearch.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jButtonSearch.setText("Buscar");
@@ -344,6 +344,10 @@ public class JF_MainFrame extends javax.swing.JFrame {
                 
             case "Extensión":{
                 controller.printImagesByExtension(jTableImages, jTextFieldSearch.getText());
+            }break;
+                
+            case "Nombre y extensión":{
+                controller.printImagesByNameAndExtension(jTableImages, jTextFieldSearch.getText());
             }break;
                 
             case "Etiqueta Marca":{

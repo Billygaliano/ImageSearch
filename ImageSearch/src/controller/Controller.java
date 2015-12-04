@@ -51,7 +51,26 @@ public class Controller {
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
             row[1] = image.getPath();
-            row[2] = image.getImage_name();
+            row[2] = image.getImage_name()+"."+image.getExtension();
+            
+            m.addRow(row); 
+        }
+        
+        jTableImages.setModel(m);
+    }
+    
+    public void printImagesByNameAndExtension(JTable jTableImages, String nameExtension){
+        ImageDAO imageDao = new ImageDAO();
+        ArrayList<Imagen> images = imageDao.getImagesByNameAndExtension(nameExtension);
+        
+        String title[] = {"Id", "Ruta", "Imagen"};
+        DefaultTableModel m = new DefaultTableModel(null,title);
+        String row[] = new String[3];
+        
+        for (Imagen image : images) {
+            row[0] = Integer.toString(image.getId_image());
+            row[1] = image.getPath();
+            row[2] = image.getImage_name()+"."+image.getExtension();
             
             m.addRow(row); 
         }
@@ -70,7 +89,7 @@ public class Controller {
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
             row[1] = image.getPath();
-            row[2] = image.getImage_name();
+            row[2] = image.getImage_name()+"."+image.getExtension();
             
             m.addRow(row); 
         }
@@ -89,7 +108,7 @@ public class Controller {
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
             row[1] = image.getPath();
-            row[2] = image.getImage_name();
+            row[2] = image.getImage_name()+"."+image.getExtension();
             
             m.addRow(row); 
         }
@@ -108,7 +127,7 @@ public class Controller {
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
             row[1] = image.getPath();
-            row[2] = image.getImage_name();
+            row[2] = image.getImage_name()+"."+image.getExtension();
             
             m.addRow(row); 
         }
@@ -127,7 +146,7 @@ public class Controller {
         for (Imagen image : images) {
             row[0] = Integer.toString(image.getId_image());
             row[1] = image.getPath();
-            row[2] = image.getImage_name();
+            row[2] = image.getImage_name()+"."+image.getExtension();
             
             m.addRow(row); 
         }
@@ -138,7 +157,6 @@ public class Controller {
     public void printSelectedImage(JLabel jLabelImage, JTable jTableImagesData, int imageId) throws IOException{
         ImageDAO imageDao = new ImageDAO();
         Imagen image = imageDao.getImageById(imageId);
-        System.out.println(image);
         ArrayList<Directory> directories = image.getDirectories();
         String pathFrom = image.getPath()+"/"+image.getImage_name()+"."+image.getExtension(); 
         String pathTo = "src/properties/thumbnail.png";

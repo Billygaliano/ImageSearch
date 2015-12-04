@@ -6,10 +6,12 @@
 package model;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
+import static java.util.Arrays.asList;
 import org.bson.Document;
 
 /**
@@ -47,6 +49,31 @@ public class ImageDAO {
         
         FindIterable<Document> iterable = collection.find(
         new Document("extension", imageExtension));
+        
+        for(Document document: iterable){
+                image = new Imagen();
+                image.setId_image((Integer) document.get("_id"));
+                image.setPath((String) document.get("ruta"));
+                image.setImage_name((String) document.get("nombre_imagen"));
+                image.setExtension((String) document.get("extension"));
+                images.add(image);
+            }
+        return images;
+    }
+    
+    public ArrayList<Imagen> getImagesByNameAndExtension(String imageNameAndExtension){
+        MongoClient mongoClient = new MongoClient("192.168.183.81", 27017);
+        MongoDatabase db = mongoClient.getDatabase("test");
+        MongoCollection<Document> collection = db.getCollection("imagenes");
+        ArrayList<Imagen> images = new ArrayList();
+        Imagen image;  
+        
+        int pointIndex = imageNameAndExtension.indexOf(".");        
+        String name = imageNameAndExtension.substring(0,pointIndex);
+        String extension = imageNameAndExtension.substring(pointIndex+1);
+        
+        FindIterable<Document> iterable = collection.find(
+        new Document("nombre_imagen", name).append("extension", extension));
         
         for(Document document: iterable){
                 image = new Imagen();

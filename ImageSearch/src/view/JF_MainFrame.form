@@ -213,13 +213,14 @@
                       <Font name="Arial" size="14" style="0"/>
                     </Property>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="6">
+                      <StringArray count="7">
                         <StringItem index="0" value="Nombre"/>
                         <StringItem index="1" value="Extensi&#xf3;n"/>
-                        <StringItem index="2" value="Directorio"/>
-                        <StringItem index="3" value="Etiqueta Marca"/>
-                        <StringItem index="4" value="Etiqueta Modelo"/>
-                        <StringItem index="5" value="Etiqueta Fecha"/>
+                        <StringItem index="2" value="Nombre y extensi&#xf3;n"/>
+                        <StringItem index="3" value="Directorio"/>
+                        <StringItem index="4" value="Etiqueta Marca"/>
+                        <StringItem index="5" value="Etiqueta Modelo"/>
+                        <StringItem index="6" value="Etiqueta Fecha"/>
                       </StringArray>
                     </Property>
                   </Properties>
