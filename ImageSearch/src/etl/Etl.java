@@ -77,17 +77,25 @@ public class Etl {
                         etiqueta.append("nombre_etiqueta",nombre_etiqueta);
                         etiqueta.append("valor", valor);
                         etiquetas.add(etiqueta);
+                        rs_etiqueta.close();
                     }
-
+                    
+                    
                     Document directorio = new Document();
                     ResultSet rs_directorio = connection.createStatement().executeQuery("Select nombre_directorio from directorio where id_directorio=" + id_directorio);
                     rs_directorio.next();
                     String nombre_directorio = rs_directorio.getString("nombre_directorio");
                     directorio.append("nombre_directorio",nombre_directorio);
                     directorio.append("etiquetas", etiquetas);
-                    directorios.add(directorio);                       
+                    directorios.add(directorio);
+                    rs_valor1.close();
+                    rs_directorio.close();
+                    
                 }
-
+                    rs_valor.close();
+                    
+                    
+                
                 Document doc = new Document("_id",id_imagen);
                 doc.append("ruta", nombre_ruta);
                 doc.append("nombre_imagen",nombre_imagen);
@@ -95,7 +103,7 @@ public class Etl {
                 doc.append("directorio",directorios);
 
                 collection.insertOne(doc);
-            }
+            }rs_imagen.close();
         } catch (SQLException ex) {
             System.out.println("Error en sql"+ex);
         } 
